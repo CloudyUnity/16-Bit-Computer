@@ -9,7 +9,7 @@ public class GateAND extends Shape{
 	public Node output;
 	
 	public GateAND(Vector2 pos) {
-		super(pos, new Vector2(50, 25), Color.LIGHT_GRAY);
+		super(pos, new Vector2(50, 25), 50, ColorManager.ORANGE);
 		Main.node.andList.add(this);
 		
 		text = "AND";
@@ -18,22 +18,19 @@ public class GateAND extends Shape{
 		deletable = true;
 		
 		input1 = new Node(new Vector2(-Node.BASE_SCALE.x, 0), true);
-		input1.layer = 55;
 		input1.parent = this;
 		
 		input2 = new Node(new Vector2(-Node.BASE_SCALE.x, scale.y * 0.5f), true);
-		input2.layer = 55;
 		input2.parent = this;
 		
 		output = new Node(new Vector2(scale.x, scale.y * 0.25f), false);
-		output.layer = 55;
 		output.parent = this;
 		output.interactible = true;
 		output.inputDisabled = true;
 	}
 	
 	public GateAND(Node i1, Node i2, Node o) {
-		super(Vector2.zero, Vector2.zero, Color.LIGHT_GRAY);
+		super(Vector2.zero, Vector2.zero, -99999, Color.LIGHT_GRAY);
 		Main.node.andList.add(this);
 		
 		visible = false;

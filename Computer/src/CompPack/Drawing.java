@@ -16,18 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Drawing extends JPanel {
-	
+
 	private static final long serialVersionUID = 1L;
 
-	List<Shape> shapeList;	
-	
+	List<Shape> shapeList;
+
 	JFrame frame;
 
 	public void initialise() {
 		frame = new JFrame("Computer");
 
 		Dimension d = new Dimension(1000, 500);
-		
+
 		frame.getContentPane().setPreferredSize(d);
 		frame.getContentPane().setMinimumSize(d);
 		frame.getContentPane().setMaximumSize(d);
@@ -40,7 +40,7 @@ public class Drawing extends JPanel {
 		setDoubleBuffered(true);
 		setLayout(null);
 
-		shapeList = new ArrayList<Shape>();		
+		shapeList = new ArrayList<Shape>();
 	}
 
 	public void addToList(Shape s) {
@@ -64,110 +64,127 @@ public class Drawing extends JPanel {
 		if (shapeList == null)
 			return;
 
-		// BG
-		g.setColor(Color.white);
-		g.fillRect(0, 0, getWidth(), getHeight());
-
 		drawShapes(g, true);
 		drawWires(g);
 		drawShapes(g, false);
 	}
-	
+
 	public void drawWires(Graphics g) {
-		
+
 		Graphics2D g2d = (Graphics2D) g;
 
 		for (Node n : new ArrayList<Node>(Main.node.nodeList)) {
 
 			if (!n.interactible || !n.visible)
 				continue;
-			
+
 			Vector2 start = n.center();
 			if (n.parent != null)
 				start = start.add(n.parent.position);
 
 			List<Vector2> ends = n.endWirePoint();
-			
-			g2d.setColor(n.state ? Node.ON_COLOR : Node.OFF_COLOR);
-			
+
+			g2d.setColor(n.color);
+
 			for (Vector2 end : ends) {
-				Vector2 mid = start.midPoint(end);				
+				Vector2 mid = start.midPoint(end);
 
 				g2d.setStroke(new BasicStroke(5));
 				g2d.drawLine((int) start.x, (int) start.y, (int) mid.x, (int) start.y);
 				g2d.drawLine((int) mid.x, (int) start.y, (int) mid.x, (int) end.y);
 				g2d.drawLine((int) mid.x, (int) end.y, (int) end.x, (int) end.y);
 			}
-			
+
 		}
 	}
-	
+
 	public void drawShapes(Graphics g, Boolean belowZero) {
-		
+
 		for (Shape s : new ArrayList<Shape>(shapeList)) {
 
 			if ((s.layer > 0 && belowZero) || (s.layer < 0 && !belowZero))
 				continue;
-			
+
 			if (!s.visible)
 				continue;
-
+			
 			g.setColor(s.color);
+
+			if (Main.mouse.hovered == s) {
+				drawHovered(g, s);
+				continue;
+			}			
 
 			Vector2 pos = new Vector2(s.position);
 			if (s.parent != null)
-				pos = pos.add(s.parent.position);			
+				pos = pos.add(s.parent.position);
 
 			if (s.isCircle)
-				drawCircle(g, s, pos);
+				drawCircle(g, pos, s.scale, s.filled);
 			else
-				drawSquare(g, s, pos);
+				drawSquare(g, pos, s.scale, s.filled);
 
-			drawText(g, s);
+			drawText(g, s.text, pos, s.scale);
 		}
 	}
 
-	public void drawSquare(Graphics g, Shape s, Vector2 pos) {
+	public void drawHovered(Graphics g, Shape s) {
 
-		if (s.filled)
-			g.fillRect((int) pos.x, (int) pos.y, (int) s.scale.x, (int) s.scale.y);
+		Vector2 pos = new Vector2(s.position);
+		if (s.parent != null)
+			pos = pos.add(s.parent.position);
+		
+		Vector2 scale = s.scale.mult(1.1f);
+
+		pos.x -= s.scale.x * 0.05f;
+		pos.y -= s.scale.y * 0.05f;		
+
+		if (s.isCircle)
+			drawCircle(g, pos, scale, s.filled);
 		else
-			g.drawRect((int) pos.x, (int) pos.y, (int) s.scale.x, (int) s.scale.y);
+			drawSquare(g, pos, scale, s.filled);
+
+		drawText(g, s.text, pos, scale);
 	}
 
-	public void drawCircle(Graphics g, Shape s, Vector2 pos) {
+	public void drawSquare(Graphics g, Vector2 pos, Vector2 scale, Boolean filled) {
 
-		if (s.filled)
-			g.fillOval((int) pos.x, (int) pos.y, (int) s.scale.x, (int) s.scale.y);
+		if (filled)
+			g.fillRect((int) pos.x, (int) pos.y, (int) scale.x, (int) scale.y);
 		else
-			g.drawOval((int) pos.x, (int) pos.y, (int) s.scale.x, (int) s.scale.y);
+			g.drawRect((int) pos.x, (int) pos.y, (int) scale.x, (int) scale.y);
 	}
 
-	public void drawText(Graphics g, Shape s) {
-		
-		String txt = s.text;
-		
+	public void drawCircle(Graphics g, Vector2 pos, Vector2 scale, Boolean filled) {
+
+		if (filled)
+			g.fillOval((int) pos.x, (int) pos.y, (int) scale.x, (int) scale.y);
+		else
+			g.drawOval((int) pos.x, (int) pos.y, (int) scale.x, (int) scale.y);
+	}
+
+	public void drawText(Graphics g, String txt, Vector2 pos, Vector2 scale) {
+
 		if (txt.isBlank())
 			return;
-		
+
 		int fontSize = 10;
 		g.setFont(new Font("TimesRoman", Font.BOLD, fontSize));
-		g.setColor(Color.white);
-		
+		g.setColor(ColorManager.parseColor(ColorManager.WHITE));
+
 		int width = g.getFontMetrics().stringWidth(txt);
-		int height = g.getFontMetrics().getHeight();	
+		int height = g.getFontMetrics().getHeight();
 		int ascent = g.getFontMetrics().getAscent();
-		
-		int size = (int) (Math.min(s.scale.x / width, s.scale.y / height) * fontSize);
-	    size = Math.max(size, 1); 
-	    size *= 0.9f;
-	    
-	    g.setFont(new Font("TimesRoman", Font.BOLD, size));
-		
-		Vector2 pos = new Vector2(s.position);
-		pos.x += (s.scale.x - width * (size / (float) fontSize)) * 0.5f;
-		pos.y += (s.scale.y + ascent * (size / (float) fontSize)) * 0.5f;
-		
+
+		int size = (int) (Math.min(scale.x / width, scale.y / height) * fontSize);
+		size = Math.max(size, 1);
+		size *= 0.9f;
+
+		g.setFont(new Font("TimesRoman", Font.BOLD, size));
+
+		pos.x += (scale.x - width * (size / (float) fontSize)) * 0.5f;
+		pos.y += (scale.y + ascent * (size / (float) fontSize)) * 0.5f;
+
 		g.drawString(txt, (int) pos.x, (int) pos.y);
 	}
 
@@ -182,10 +199,10 @@ public class Drawing extends JPanel {
 
 		return null;
 	}
-	
+
 	public void closeFrame() {
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        WindowEvent windowClosing = new WindowEvent(frame, WindowEvent.WINDOW_CLOSING);
-        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(windowClosing);
-    }
+		WindowEvent windowClosing = new WindowEvent(frame, WindowEvent.WINDOW_CLOSING);
+		Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(windowClosing);
+	}
 }

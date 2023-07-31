@@ -5,8 +5,8 @@ import java.awt.event.MouseEvent;
 
 public class BtnBlockMaker extends Shape{
 
-	public BtnBlockMaker(Vector2 pos, Vector2 scale) {
-		super(pos, scale, Color.lightGray);
+	public BtnBlockMaker(Vector2 pos, Vector2 scale, int layer) {
+		super(pos, scale, layer, ColorManager.DARKER_BLUE);
 		
 		interactible = true;
 	}
@@ -19,6 +19,7 @@ public class BtnBlockMaker extends Shape{
 			return;
 		
 		GateBlock gate = new GateBlock(block, Main.mouse.mousePos, Color.lightGray);
+		gate.setColor(ColorManager.GREEN);
 		Main.mouse.setSelected(gate);
 	}
 }

@@ -1,11 +1,9 @@
 package CompPack;
 
-import java.awt.Color;
-
 public class BtnRemoveBlock extends Shape {
 
-	public BtnRemoveBlock(Vector2 pos, Vector2 scale) {
-		super(pos, scale, Color.lightGray);
+	public BtnRemoveBlock(Vector2 pos, Vector2 scale, int layer) {
+		super(pos, scale, layer, ColorManager.RED);
 		
 		interactible = true;
 	}

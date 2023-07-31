@@ -1,14 +1,12 @@
 package CompPack;
 
-import java.awt.Color;
-
 public class BtnChangeNodes extends Shape{
 
 	Boolean decrease;
 	Boolean input;
 	
-	public BtnChangeNodes(Vector2 pos, Vector2 scale, Color color, Boolean decrease, Boolean input) {
-		super(pos, scale, color);
+	public BtnChangeNodes(Vector2 pos, Vector2 scale, int layer, Boolean decrease, Boolean input) {
+		super(pos, scale, layer, ColorManager.DARKER_BLUE);
 		this.decrease = decrease;
 		this.input = input;
 		

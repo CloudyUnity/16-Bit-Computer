@@ -16,12 +16,10 @@ public class Node extends Shape{
 	public Boolean isInput = false;
 	public Boolean isOutput = false;
 	
-	public static final Color ON_COLOR = Color.red;
-	public static final Color OFF_COLOR = Color.black;	
 	public static final Vector2 BASE_SCALE = new Vector2(15, 15);
 	
 	public Node(Vector2 pos, Boolean outputDisabled) {
-		super(pos, BASE_SCALE, ON_COLOR);		
+		super(pos, BASE_SCALE, 55, Color.black);		
 		
 		if (!outputDisabled) {
 			drag = new NodeDragger(this);
@@ -34,7 +32,7 @@ public class Node extends Shape{
 	
 	public void update() {
 		
-		if (drag != null && MyMouseListener.selected != drag) {
+		if (drag != null && Main.mouse.selected != drag) {
 			Vector2 pos = new Vector2(position);
 			if (parent != null)
 				pos = pos.add(parent.position);
@@ -52,7 +50,10 @@ public class Node extends Shape{
 				outputs.get(i).state = state;
 		}
 		
-		color = state ? ON_COLOR : OFF_COLOR;			
+		if (state)
+			setColor(ColorManager.RED);
+		else
+			setColor(ColorManager.BLACK);
 	}
 	
 	public List<Vector2> endWirePoint() {
@@ -62,7 +63,7 @@ public class Node extends Shape{
 		if (drag == null)
 			return results;			
 		
-		if (MyMouseListener.selected == drag) {
+		if (Main.mouse.selected == drag) {
 			results.add(drag.center());
 		}
 		

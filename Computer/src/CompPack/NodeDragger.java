@@ -8,7 +8,7 @@ public class NodeDragger extends Shape{
 	public Node conNode;
 	
 	public NodeDragger(Node input) {
-		super(input.position, input.scale, Color.cyan);
+		super(input.position, input.scale, -9999999, Color.cyan);
 		this.conNode = input;
 		
 		draggable = true;

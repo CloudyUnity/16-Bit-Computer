@@ -8,7 +8,7 @@ public class GateNOT extends Shape{
 	public Node output;
 	
 	public GateNOT(Vector2 pos) {
-		super(pos, new Vector2(50, 25), Color.LIGHT_GRAY);
+		super(pos, new Vector2(50, 25), 50, ColorManager.ORANGE);
 		Main.node.notList.add(this);
 		
 		text = "NOT";
@@ -17,18 +17,16 @@ public class GateNOT extends Shape{
 		deletable = true;
 		
 		input = new Node(new Vector2(-Node.BASE_SCALE.x, scale.y * 0.25f), true);
-		input.layer = 55;
 		input.parent = this;
 		
 		output = new Node(new Vector2(50, scale.y * 0.25f), false);
-		output.layer = 55;
 		output.parent = this;
 		output.interactible = true;
 		output.inputDisabled = true;
 	}
 	
 	public GateNOT(Node i, Node o) {
-		super(Vector2.zero, Vector2.zero, Color.LIGHT_GRAY);
+		super(Vector2.zero, Vector2.zero, -999999, Color.LIGHT_GRAY);
 		Main.node.notList.add(this);
 		
 		visible = false;
