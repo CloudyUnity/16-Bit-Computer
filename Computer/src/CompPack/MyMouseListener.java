@@ -9,7 +9,9 @@ import javax.swing.SwingUtilities;
 
 public class MyMouseListener implements MouseListener {
 
-	public static Shape selected;
+	public Shape selected;
+	
+	public Shape hovered;
 
 	public Vector2 mousePos;
 	
@@ -20,6 +22,8 @@ public class MyMouseListener implements MouseListener {
 		Point mousePoint = MouseInfo.getPointerInfo().getLocation();
 		SwingUtilities.convertPointFromScreen(mousePoint, Main.draw);
 		mousePos = new Vector2(mousePoint.x, mousePoint.y);
+		
+		hovered = Main.draw.closestInteract();
 		
 		if (selected == null || !selected.draggable)
 			return;

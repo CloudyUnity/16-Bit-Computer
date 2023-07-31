@@ -10,7 +10,7 @@ public class GateBlock extends Shape{
 	public List<Node> outputs = new ArrayList<Node>();
 	
 	public GateBlock(Block block, Vector2 pos, Color color) {
-		super(pos, new Vector2(50, 25 * Math.max(block.inputs.size(), block.outputs.size())), color);
+		super(pos, new Vector2(50, 25 * Math.max(block.inputs.size(), block.outputs.size())), 50, color);
 		
 		text = block.name;
 		draggable = true;
@@ -21,7 +21,6 @@ public class GateBlock extends Shape{
 		
 		for (int i = 0; i < block.inputs.size(); i++) {
 			Node n = new Node(new Vector2(-Node.BASE_SCALE.x, (int)(scale.y - 25 - i * spacing)), true);
-			n.layer = 55;
 			n.parent = this;
 			inputs.add(n);
 		}
@@ -30,7 +29,6 @@ public class GateBlock extends Shape{
 		
 		for (int i = 0; i < block.outputs.size(); i++) {
 			Node n = new Node(new Vector2(scale.x, (int)(scale.y - 25 - i * spacing)), false);
-			n.layer = 55;
 			n.parent = this;
 			n.interactible = true;
 			n.inputDisabled = true;

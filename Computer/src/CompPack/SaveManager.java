@@ -76,7 +76,7 @@ public class SaveManager {
 		
 		for (Block block : data.blocks) {
 			if (block.name.equals(name)) {
-				showBlock(block);
+				//showBlock(block);
 				return block;
 			}				
 		}
@@ -111,7 +111,7 @@ public class SaveManager {
 		}
 		for (Integer i : block.outputs) {
 			System.out.println("Output - " + i);
-		}
+		}		
 		for (AND i : block.andList) {
 			System.out.println("AND - " + i.input1 + ", " + i.input2 + ", " + i.output);
 		}

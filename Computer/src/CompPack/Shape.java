@@ -21,6 +21,10 @@ public class Shape {
 	public String text = "";
 	
 	public int layer = 0;
+	
+	public void setColor(String hex) {
+		this.color = ColorManager.parseColor(hex);		
+	}
 
 	public Vector2 max() {
 		return position.add(scale);
@@ -34,10 +38,20 @@ public class Shape {
 		return position.add(scale.mult(0.5f));
 	}
 
-	public Shape(Vector2 pos, Vector2 scale, Color color) {
+	public Shape(Vector2 pos, Vector2 scale, int layer, Color color) {
 		this.position = pos;
 		this.scale = scale;
+		this.layer = layer;
 		this.color = color;
+		
+		Main.draw.addToList(this);
+	}
+	
+	public Shape(Vector2 pos, Vector2 scale, int layer, String color) {
+		this.position = pos;
+		this.scale = scale;
+		this.layer = layer;
+		this.setColor(color);
 		
 		Main.draw.addToList(this);
 	}

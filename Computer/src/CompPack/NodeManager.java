@@ -1,5 +1,6 @@
 package CompPack;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,6 @@ public class NodeManager {
 		for (int i = 0; i < inputCount; i++) {
 
 			Node n = new Node(new Vector2(50, 400 - iSpacing * i), false);
-			n.layer = 55;
 			n.interactible = true;
 			n.inputDisabled = true;
 			n.isInput = true;
@@ -38,9 +38,9 @@ public class NodeManager {
 		for (int i = 0; i < outputCount; i++) {
 
 			Node n = new Node(new Vector2(925, 400 - i * oSpacing), true);
-			n.layer = 55;
 			n.isOutput = true;
 			n.scale = IN_OUT_BASE_SCALE;
+			n.text = "Output";
 			nodeListOutput.add(n);
 		}
 	}

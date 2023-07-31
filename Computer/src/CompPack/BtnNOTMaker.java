@@ -1,12 +1,11 @@
 package CompPack;
 
-import java.awt.Color;
 import java.awt.event.MouseEvent;
 
 public class BtnNOTMaker extends Shape{
 
-	public BtnNOTMaker(Vector2 pos, Vector2 scale) {
-		super(pos, scale, Color.lightGray);
+	public BtnNOTMaker(Vector2 pos, Vector2 scale, int layer) {
+		super(pos, scale, layer, ColorManager.DARKER_BLUE);
 		
 		interactible = true;
 	}
