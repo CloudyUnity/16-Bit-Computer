@@ -3,6 +3,7 @@ package CompPack;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
@@ -121,10 +122,8 @@ public class Drawing extends JPanel {
 				drawCircle(g, s, pos);
 			else
 				drawSquare(g, s, pos);
-			
-			pos = pos.add(9, 15);
 
-			drawText(g, pos, s.text);
+			drawText(g, s);
 		}
 	}
 
@@ -144,9 +143,32 @@ public class Drawing extends JPanel {
 			g.drawOval((int) pos.x, (int) pos.y, (int) s.scale.x, (int) s.scale.y);
 	}
 
-	public void drawText(Graphics g, Vector2 pos, String text) {
+	public void drawText(Graphics g, Shape s) {
+		
+		String txt = s.text;
+		
+		if (txt.isBlank())
+			return;
+		
+		int fontSize = 10;
+		g.setFont(new Font("TimesRoman", Font.BOLD, fontSize));
 		g.setColor(Color.white);
-		g.drawString(text, (int) pos.x, (int) pos.y);
+		
+		int width = g.getFontMetrics().stringWidth(txt);
+		int height = g.getFontMetrics().getHeight();	
+		int ascent = g.getFontMetrics().getAscent();
+		
+		int size = (int) (Math.min(s.scale.x / width, s.scale.y / height) * fontSize);
+	    size = Math.max(size, 1); 
+	    size *= 0.9f;
+	    
+	    g.setFont(new Font("TimesRoman", Font.BOLD, size));
+		
+		Vector2 pos = new Vector2(s.position);
+		pos.x += (s.scale.x - width * (size / (float) fontSize)) * 0.5f;
+		pos.y += (s.scale.y + ascent * (size / (float) fontSize)) * 0.5f;
+		
+		g.drawString(txt, (int) pos.x, (int) pos.y);
 	}
 
 	public Shape closestInteract() {

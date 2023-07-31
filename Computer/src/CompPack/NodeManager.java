@@ -30,6 +30,7 @@ public class NodeManager {
 			n.inputDisabled = true;
 			n.isInput = true;
 			n.scale = IN_OUT_BASE_SCALE;
+			n.text = "Input";
 			nodeListInput.add(n);
 		}
 
