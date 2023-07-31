@@ -10,6 +10,7 @@ public class BlockBuilder {
 		
 		int iC = 0;
 		int oC = 0;
+		
 		for (int i = 0; i < block.nodes; i++) {
 			
 			if (block.inputs.contains(i)) {
@@ -59,8 +60,6 @@ public class BlockBuilder {
 			Node b = nodeList[(int)con.y];
 			a.outputs.add(b);
 			b.inputNode = a;
-			
-			System.out.println(con.x + " " + con.y);
 		}
 	}
 }
