@@ -9,13 +9,14 @@ public class GateAND extends Shape{
 	public Node output;
 	
 	public GateAND(Vector2 pos) {
-		super(pos, new Vector2(50, 25), 50, ColorManager.ORANGE);
+		super(pos, new Vector2(50, 25), SceneBuilder.BLOCK, ColorManager.ORANGE);
 		Main.node.andList.add(this);
 		
 		text = "AND";
 		draggable = true;
 		interactible = true;
 		deletable = true;
+		parent = SceneBuilder.getScene();
 		
 		input1 = new Node(new Vector2(-Node.BASE_SCALE.x, 0), true);
 		input1.parent = this;
@@ -30,7 +31,7 @@ public class GateAND extends Shape{
 	}
 	
 	public GateAND(Node i1, Node i2, Node o) {
-		super(Vector2.zero, Vector2.zero, -99999, Color.LIGHT_GRAY);
+		super(Vector2.zero, Vector2.zero, SceneBuilder.INVISIBLE, Color.LIGHT_GRAY);
 		Main.node.andList.add(this);
 		
 		visible = false;
@@ -43,8 +44,8 @@ public class GateAND extends Shape{
 	@Override
 	protected void update() {
 		
-		// Gate Delay
-		if (Math.random() < 0.1f)
+		// Gate Delay (DISABLED)
+		if (Math.random() < -1f)
 			return;
 		
 		output.state = input1.state && input2.state;

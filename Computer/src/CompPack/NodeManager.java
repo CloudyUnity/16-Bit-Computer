@@ -1,6 +1,5 @@
 package CompPack;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,32 +15,23 @@ public class NodeManager {
 	public int outputNodeCount;
 	
 	public static final Vector2 IN_OUT_BASE_SCALE = new Vector2(20, 20);
+	public static final int MAX_NODES = 48;
+	public static final int DEEPEST_NODE_X = 425;
+	public static final int NODE_LENGTH = 375;
 
 	public void initialise(int inputCount, int outputCount) {
 
 		inputNodeCount = inputCount;
 		outputNodeCount = outputCount;
-
-		int iSpacing = 400 / inputCount;
+		
 		for (int i = 0; i < inputCount; i++) {
 
-			Node n = new Node(new Vector2(50, 400 - iSpacing * i), false);
-			n.interactible = true;
-			n.inputDisabled = true;
-			n.isInput = true;
-			n.scale = IN_OUT_BASE_SCALE;
-			n.text = "Input";
-			nodeListInput.add(n);
+			makeInput(i);
 		}
 
-		int oSpacing = 400 / outputCount;
 		for (int i = 0; i < outputCount; i++) {
 
-			Node n = new Node(new Vector2(925, 400 - i * oSpacing), true);
-			n.isOutput = true;
-			n.scale = IN_OUT_BASE_SCALE;
-			n.text = "Output";
-			nodeListOutput.add(n);
+			makeOutput(i);
 		}
 	}
 
@@ -55,11 +45,7 @@ public class NodeManager {
 			if (n == self || n.inputDisabled)
 				continue;
 
-			Vector2 pos = new Vector2(n.position);
-			if (n.parent != null)
-				pos = pos.add(n.parent.position);
-
-			double newDis = vec.distance(pos);
+			double newDis = vec.distance(n.worldPosition());
 			if (newDis < dis) {
 				dis = newDis;
 				node = n;
@@ -78,24 +64,17 @@ public class NodeManager {
 
 	public void addInput() {
 		
-		if (inputNodeCount >= 15)
+		if (inputNodeCount >= MAX_NODES)
 			return;
 
-		inputNodeCount++;
+		inputNodeCount++;	
+		int maxNodeCount = inputNodeCount - 1;
+		for (int i = 0; i < maxNodeCount; i++) {
 
-		int spacing = 400 / inputNodeCount;
-		for (int i = 0; i < inputNodeCount - 1; i++) {
-
-			nodeListInput.get(i).position.y = 400 - i * spacing;
+			nodeListInput.get(i).position = inputPos(i);
 		}
 
-		Node n = new Node(new Vector2(50, spacing), false);
-		n.layer = 55;
-		n.interactible = true;
-		n.scale = IN_OUT_BASE_SCALE;
-		n.inputDisabled = true;
-		n.isInput = true;
-		nodeListInput.add(n);
+		makeInput(maxNodeCount);
 	}
 
 	public void removeInput() {
@@ -110,31 +89,25 @@ public class NodeManager {
 		nodeList.remove(remove);
 		Main.draw.shapeList.remove(remove);
 
-		int spacing = 400 / inputNodeCount;
 		for (int i = 0; i < nodeListInput.size(); i++) {
 
-			nodeListInput.get(i).position.y = 400 - i * spacing;
+			nodeListInput.get(i).position = inputPos(i);
 		}
 	}
 
 	public void addOutput() {
 
-		if (outputNodeCount >= 15)
+		if (outputNodeCount >= MAX_NODES)
 			return;
 		
 		outputNodeCount++;
+		int maxNodeCount = outputNodeCount - 1;
+		for (int i = 0; i < maxNodeCount; i++) {
 
-		int spacing = 400 / outputNodeCount;
-		for (int i = 0; i < outputNodeCount - 1; i++) {
-
-			nodeListOutput.get(i).position.y = 400 - i * spacing;
+			nodeListOutput.get(i).position = outputPos(i);
 		}
 
-		Node n = new Node(new Vector2(925, spacing), true);
-		n.layer = 55;
-		n.scale = IN_OUT_BASE_SCALE;
-		n.isOutput = true;
-		nodeListOutput.add(n);
+		makeOutput(maxNodeCount);
 	}
 
 	public void removeOutput() {
@@ -148,11 +121,54 @@ public class NodeManager {
 		nodeListOutput.remove(remove);
 		nodeList.remove(remove);
 		Main.draw.shapeList.remove(remove);
-
-		int spacing = 400 / outputNodeCount;
+		
 		for (int i = 0; i < nodeListOutput.size(); i++) {
 
-			nodeListOutput.get(i).position.y = 400 - i * spacing;
+			nodeListOutput.get(i).position = outputPos(i);
 		}
+	}
+	
+	void makeInput(int i) {
+			
+		Node n = new Node(inputPos(i), false);
+		n.interactible = true;
+		n.inputDisabled = true;
+		n.isInput = true;
+		n.scale = IN_OUT_BASE_SCALE;
+		n.text = Character.toString('a' + i);		
+		n.layer = SceneBuilder.HUD_NODE;
+		nodeListInput.add(n);
+		
+		Main.draw.reSortList();
+	}
+	
+	Vector2 inputPos(int i) {
+		int column = (int)Math.floor(i / 16);
+		int spacing = NODE_LENGTH / (int)Extensions.Clamp(inputNodeCount, 1, 16);
+		int x = 80 - column * 30;		
+		int y = DEEPEST_NODE_X - spacing * (i - column * 16);
+		y -= 8 * column;
+		return new Vector2(x, y);
+	}
+	
+	void makeOutput(int i) {
+		
+		Node n = new Node(outputPos(i), true);
+		n.isOutput = true;
+		n.scale = IN_OUT_BASE_SCALE;
+		n.text = "" + i;
+		n.layer = SceneBuilder.HUD_NODE;
+		nodeListOutput.add(n);
+		
+		Main.draw.reSortList();
+	}
+	
+	Vector2 outputPos(int i) {
+		int column = (int)Math.floor(i / 16);
+		int spacing = NODE_LENGTH / (int)Extensions.Clamp(outputNodeCount, 1, 16);
+		int x = 900 + column * 30;		
+		int y = DEEPEST_NODE_X - spacing * (i - column * 16);
+		y -= 8 * column;
+		return new Vector2(x, y);
 	}
 }
