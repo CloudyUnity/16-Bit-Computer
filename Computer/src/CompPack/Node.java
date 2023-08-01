@@ -19,7 +19,7 @@ public class Node extends Shape{
 	public static final Vector2 BASE_SCALE = new Vector2(15, 15);
 	
 	public Node(Vector2 pos, Boolean outputDisabled) {
-		super(pos, BASE_SCALE, 55, Color.black);		
+		super(pos, BASE_SCALE, SceneBuilder.NODE, Color.black);		
 		
 		if (!outputDisabled) {
 			drag = new NodeDragger(this);
@@ -33,10 +33,7 @@ public class Node extends Shape{
 	public void update() {
 		
 		if (drag != null && Main.mouse.selected != drag) {
-			Vector2 pos = new Vector2(position);
-			if (parent != null)
-				pos = pos.add(parent.position);
-			drag.position = pos;
+			drag.position = new Vector2(worldPosition());
 		}	
 		
 		Boolean noInput = inputNode == null || inputNode.deactivated;
@@ -70,7 +67,7 @@ public class Node extends Shape{
 		if (outputs.size() != 0) {
 			
 			for (Node output : outputs) {
-				results.add(output.parent == null ? output.center() : output.center().add(output.parent.position));
+				results.add(new Vector2(output.worldCenter()));
 			}
 		}
 		

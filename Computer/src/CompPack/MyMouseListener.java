@@ -16,6 +16,12 @@ public class MyMouseListener implements MouseListener {
 	public Vector2 mousePos;
 	
 	double lastPressTime = 0;
+	
+	public int selectedDefaultLayer;
+	
+	public Boolean draggingScene = false;
+	
+	Vector2 lastMousePos = Vector2.zero;
 
 	public void update() {
 
@@ -24,6 +30,13 @@ public class MyMouseListener implements MouseListener {
 		mousePos = new Vector2(mousePoint.x, mousePoint.y);
 		
 		hovered = Main.draw.closestInteract();
+		
+		if (draggingScene) {
+			Vector2 dif = mousePos.subtract(lastMousePos);
+			selected.position = selected.position.add(dif);
+		}
+		
+		lastMousePos = mousePos;
 		
 		if (selected == null || !selected.draggable)
 			return;
@@ -38,19 +51,30 @@ public class MyMouseListener implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+				
 		lastPressTime = System.currentTimeMillis();
+				
+		if (e.getButton() == MouseEvent.BUTTON2) {
+			draggingScene = true;
+			selected = SceneBuilder.getScene();
+			return;
+		}
 		
-		selected = Main.draw.closestInteract();
-		if (selected != null) {
-			if (e.getButton() == MouseEvent.BUTTON1)
-				selected.onMousePressed(e);
+		Shape hovered = Main.draw.closestInteract();
+		
+		if (hovered != null) {
+			if (e.getButton() == MouseEvent.BUTTON1) {
+				selected = hovered;
+				hovered.onMousePressed(e);				
+			}				
 			else if (e.getButton() == MouseEvent.BUTTON3)
-				selected.onMouse3Pressed();
+				hovered.onMouse3Pressed();
 		}			
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		
 		double clickDur = System.currentTimeMillis() - lastPressTime;
 		
 		if (selected == null)
@@ -58,6 +82,7 @@ public class MyMouseListener implements MouseListener {
 		
 		selected.onMouseRelease(clickDur);
 		selected = null;
+		draggingScene = false;
 	}
 	
 	public void setSelected(Shape shape) {

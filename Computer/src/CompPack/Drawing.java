@@ -1,7 +1,6 @@
 package CompPack;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -13,6 +12,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Drawing extends JPanel {
@@ -64,23 +65,21 @@ public class Drawing extends JPanel {
 		if (shapeList == null)
 			return;
 
-		drawShapes(g, true);
-		drawWires(g);
-		drawShapes(g, false);
+		drawShapes(g);
 	}
 
 	public void drawWires(Graphics g) {
 
 		Graphics2D g2d = (Graphics2D) g;
+		
+		List<Integer> usedMids = new ArrayList<Integer>();
 
 		for (Node n : new ArrayList<Node>(Main.node.nodeList)) {
 
 			if (!n.interactible || !n.visible)
 				continue;
 
-			Vector2 start = n.center();
-			if (n.parent != null)
-				start = start.add(n.parent.position);
+			Vector2 start = n.worldCenter();
 
 			List<Vector2> ends = n.endWirePoint();
 
@@ -88,6 +87,16 @@ public class Drawing extends JPanel {
 
 			for (Vector2 end : ends) {
 				Vector2 mid = start.midPoint(end);
+				int counter = 0;
+				
+				while (counter < 50 && usedMids.contains((int)mid.x)) {
+					mid.x += 10;
+					if (mid.x > end.x - 1)
+						mid.x = start.x + 1;
+					counter++;
+				}
+				
+				usedMids.add((int)mid.x);
 
 				g2d.setStroke(new BasicStroke(5));
 				g2d.drawLine((int) start.x, (int) start.y, (int) mid.x, (int) start.y);
@@ -98,12 +107,15 @@ public class Drawing extends JPanel {
 		}
 	}
 
-	public void drawShapes(Graphics g, Boolean belowZero) {
+	public void drawShapes(Graphics g) {
 
+		Boolean drawnWires = false;
 		for (Shape s : new ArrayList<Shape>(shapeList)) {
 
-			if ((s.layer > 0 && belowZero) || (s.layer < 0 && !belowZero))
-				continue;
+			if ((s.layer >= SceneBuilder.WIRE && !drawnWires)) {
+				drawWires(g);
+				drawnWires = true;
+			}
 
 			if (!s.visible)
 				continue;
@@ -115,9 +127,7 @@ public class Drawing extends JPanel {
 				continue;
 			}			
 
-			Vector2 pos = new Vector2(s.position);
-			if (s.parent != null)
-				pos = pos.add(s.parent.position);
+			Vector2 pos = s.worldPosition();
 
 			if (s.isCircle)
 				drawCircle(g, pos, s.scale, s.filled);
@@ -130,9 +140,7 @@ public class Drawing extends JPanel {
 
 	public void drawHovered(Graphics g, Shape s) {
 
-		Vector2 pos = new Vector2(s.position);
-		if (s.parent != null)
-			pos = pos.add(s.parent.position);
+		Vector2 pos = s.worldPosition();
 		
 		Vector2 scale = s.scale.mult(1.1f);
 
@@ -204,5 +212,16 @@ public class Drawing extends JPanel {
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		WindowEvent windowClosing = new WindowEvent(frame, WindowEvent.WINDOW_CLOSING);
 		Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(windowClosing);
+	}
+	
+	public void reSortList() {
+		
+		Collections.sort(shapeList, new Comparator<Shape>(){
+		     public int compare(Shape a, Shape b){
+		         if(a.layer == b.layer)
+		             return 0;
+		         return a.layer < b.layer ? -1 : 1;
+		     }
+		});
 	}
 }

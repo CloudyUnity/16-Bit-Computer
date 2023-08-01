@@ -10,6 +10,7 @@ public class Vector2 implements Serializable{
 	public float y;
 	
 	public static Vector2 zero = new Vector2(0, 0);
+	public static Vector2 one = new Vector2(1, 1);
 	
 	public Vector2(float x, float y) {
 		this.x = x;
@@ -36,6 +37,14 @@ public class Vector2 implements Serializable{
 	
 	public Vector2 add(int a, int b) {
 		return new Vector2(x + a, y + b);
+	}
+	
+	public Vector2 subtract(Vector2 b) {
+		return new Vector2(x - b.x, y - b.y);
+	}
+	
+	public Vector2 subtract(int a, int b) {
+		return new Vector2(x - a, y - b);
 	}
 	
 	public Vector2 mult(float b) {
