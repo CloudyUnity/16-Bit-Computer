@@ -27,55 +27,72 @@ public class SceneBuilder {
 	public static void initialise() {
 		
 		// Left BG
-		new Shape(new Vector2(0, 0), new Vector2(100, 3000), HUD, ColorManager.DARK_BLUE);
-		
-		// Right BG
-		new Shape(new Vector2(900, 0), new Vector2(100, 3000), HUD, ColorManager.DARK_BLUE);		
-		
-		// Down BG
-		new Shape(new Vector2(0, 450), new Vector2(3000, 100), HUD, ColorManager.DARK_BLUE);
+		Shape s = new Shape(new Vector2(0, 0), new Vector2(100, 3000), HUD, ColorManager.DARK_BLUE);
 		
 		// Up BG
 		new Shape(new Vector2(0, 0), new Vector2(3000, 50), HUD, ColorManager.DARK_BLUE);
 		
+		// Right BG
+		s = new Shape(new Vector2(100, 0), new Vector2(3000, 3000), HUD, ColorManager.DARK_BLUE);
+		s.relativeToWidth = true;
+		
+		// Down BG
+		s = new Shape(new Vector2(0, 50), new Vector2(3000, 3000), HUD, ColorManager.DARK_BLUE);
+		s.relativeToHeight = true;
+		
 		// BG
 		new Shape(Vector2.zero, new Vector2(3000, 3000), BG, ColorManager.LIGHT_BLUE);
 		
-		Shape s = new Shape(new Vector2(100, 50), new Vector2(799, 399), BG + 1, ColorManager.WHITE);
+		s = new Shape(new Vector2(100, 50), new Vector2(201, 101), BG + 1, ColorManager.WHITE);
 		s.filled = false;
+		s.relativeToWidthScale = true;
+		s.relativeToHeightScale = true;
 		
 		// Buttons		
-		BtnChangeNodes btn = new BtnChangeNodes(new Vector2(60, 450), new Vector2(20, 20), BUTTON, false, true);
+		BtnChangeNodes btn = new BtnChangeNodes(new Vector2(60, 50), new Vector2(20, 20), BUTTON, false, true);
 		btn.text = "+";
+		btn.relativeToHeight = true;
 		
-		btn = new BtnChangeNodes(new Vector2(20, 450), new Vector2(20, 20), BUTTON, true, true);
+		btn = new BtnChangeNodes(new Vector2(20, 50), new Vector2(20, 20), BUTTON, true, true);
 		btn.text = "-";
+		btn.relativeToHeight = true;
 		
-		btn = new BtnChangeNodes(new Vector2(960, 450), new Vector2(20, 20), BUTTON, false, false);
+		btn = new BtnChangeNodes(new Vector2(40, 50), new Vector2(20, 20), BUTTON, false, false);
 		btn.text = "+";
+		btn.relativeToHeight = true;
+		btn.relativeToWidth = true;
 		
-		btn = new BtnChangeNodes(new Vector2(920, 450), new Vector2(20, 20), BUTTON, true, false);
+		btn = new BtnChangeNodes(new Vector2(80, 50), new Vector2(20, 20), BUTTON, true, false);
 		btn.text = "-";
+		btn.relativeToHeight = true;
+		btn.relativeToWidth = true;
 		
-		BtnSaveBlock save = new BtnSaveBlock(new Vector2(100, 460), new Vector2(50, 25), BUTTON);
+		BtnSaveBlock save = new BtnSaveBlock(new Vector2(100, 40), new Vector2(50, 25), BUTTON);
 		save.text = "Save";
+		save.relativeToHeight = true;
 		
-		BtnRemoveBlock remove = new BtnRemoveBlock(new Vector2(530, 460), new Vector2(50, 25), BUTTON);
+		BtnRemoveBlock remove = new BtnRemoveBlock(new Vector2(530, 40), new Vector2(50, 25), BUTTON);
 		remove.text = "Delete";
+		remove.relativeToHeight = true;
 		
-		BtnANDMaker andMake = new BtnANDMaker(new Vector2(155, 460), new Vector2(50, 25), BUTTON);
+		BtnANDMaker andMake = new BtnANDMaker(new Vector2(155, 40), new Vector2(50, 25), BUTTON);
 		andMake.text = "AND";
+		andMake.relativeToHeight = true;
 		
-		BtnNOTMaker notMake = new BtnNOTMaker(new Vector2(210, 460), new Vector2(50, 25), BUTTON);
+		BtnNOTMaker notMake = new BtnNOTMaker(new Vector2(210, 40), new Vector2(50, 25), BUTTON);
 		notMake.text = "NOT";
+		notMake.relativeToHeight = true;
 		
-		BtnBlockMaker blockMake = new BtnBlockMaker(new Vector2(265, 460), new Vector2(50, 25), BUTTON);
+		BtnBlockMaker blockMake = new BtnBlockMaker(new Vector2(265, 40), new Vector2(50, 25), BUTTON);
 		blockMake.text = "Get";
+		blockMake.relativeToHeight = true;
 		
-		BtnRestart restart = new BtnRestart(new Vector2(585, 460), new Vector2(50, 25), BUTTON);
+		BtnRestart restart = new BtnRestart(new Vector2(585, 40), new Vector2(50, 25), BUTTON);
 		restart.text = "Restart";
+		restart.relativeToHeight = true;
 		
-		BtnFreeNodeMaker freeNode = new BtnFreeNodeMaker(new Vector2(640, 460), new Vector2(50, 25), BUTTON);
+		BtnFreeNodeMaker freeNode = new BtnFreeNodeMaker(new Vector2(640, 40), new Vector2(50, 25), BUTTON);
 		freeNode.text = "Node";
+		freeNode.relativeToHeight = true;
 	}
 }

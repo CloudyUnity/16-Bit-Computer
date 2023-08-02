@@ -33,7 +33,7 @@ public class NodeDragger extends Shape{
 				conNode.setStateSize(size);
 			}
 			catch (Exception e) {
-				System.out.println("ERROR: Invalid integer");
+				conNode.hideWires = !conNode.hideWires;
 			}
 		}
 	}

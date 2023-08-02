@@ -76,7 +76,7 @@ public class SaveManager {
 		
 		for (Block block : data.blocks) {
 			if (block.name.equals(name)) {
-				showBlock(block);
+				//showBlock(block);
 				return block;
 			}				
 		}

@@ -21,6 +21,8 @@ public class UpdateManager {
 			
 			Main.node.update();
 			
+			InputField.update();
+			
 			for (Shape s : Main.draw.shapeList) {
 				s.update();
 			}

@@ -17,9 +17,6 @@ public class NodeManager {
 	public int outputNodeCount;
 	
 	public static final Vector2 IN_OUT_BASE_SCALE = new Vector2(20, 20);
-	public static final int MAX_NODES = 48;
-	public static final int DEEPEST_NODE_X = 425;
-	public static final int NODE_LENGTH = 375;
 
 	public void initialise(int inputCount, int outputCount) {
 
@@ -62,21 +59,21 @@ public class NodeManager {
 		for (Node n : nodeList) {
 			n.update();
 		}
+		
+		for (int i = 0; i < inputNodeCount; i++) {
+			nodeListInput.get(i).position = inputPos(i);
+		}
+		
+		for (int i = 0; i < nodeListOutput.size(); i++) {
+			nodeListOutput.get(i).position = outputPos(i);
+		}
 	}
 
 	public void addInput() {
 		
-		if (inputNodeCount >= MAX_NODES)
-			return;
-
 		inputNodeCount++;	
-		int maxNodeCount = inputNodeCount - 1;
-		for (int i = 0; i < maxNodeCount; i++) {
 
-			nodeListInput.get(i).position = inputPos(i);
-		}
-
-		makeInput(maxNodeCount);
+		makeInput(inputNodeCount - 1);
 	}
 
 	public void removeInput() {
@@ -90,26 +87,13 @@ public class NodeManager {
 		nodeListInput.remove(remove);
 		nodeList.remove(remove);
 		Main.draw.shapeList.remove(remove);
-
-		for (int i = 0; i < nodeListInput.size(); i++) {
-
-			nodeListInput.get(i).position = inputPos(i);
-		}
 	}
 
 	public void addOutput() {
 
-		if (outputNodeCount >= MAX_NODES)
-			return;
-		
 		outputNodeCount++;
-		int maxNodeCount = outputNodeCount - 1;
-		for (int i = 0; i < maxNodeCount; i++) {
 
-			nodeListOutput.get(i).position = outputPos(i);
-		}
-
-		makeOutput(maxNodeCount);
+		makeOutput(outputNodeCount - 1);
 	}
 
 	public void removeOutput() {
@@ -124,10 +108,7 @@ public class NodeManager {
 		nodeList.remove(remove);
 		Main.draw.shapeList.remove(remove);
 		
-		for (int i = 0; i < nodeListOutput.size(); i++) {
-
-			nodeListOutput.get(i).position = outputPos(i);
-		}
+		
 	}
 	
 	void makeInput(int i) {
@@ -148,10 +129,16 @@ public class NodeManager {
 	}
 	
 	Vector2 inputPos(int i) {
-		int column = (int)Math.floor(i / 16);
-		int spacing = NODE_LENGTH / (int)Extensions.clamp(inputNodeCount, 1, 16);
+		
+		Vector2 screenSize = Main.draw.getWindowSize();
+		
+		int max = (int)(screenSize.y / 31.25f);
+		
+		int column = (int)Math.floor(i / max);
+		int spacing = ((int)screenSize.y - 125) / (int)Extensions.clamp(inputNodeCount, 1, max);		
+		
 		int x = 80 - column * 30;		
-		int y = DEEPEST_NODE_X - spacing * (i - column * 16);
+		int y = (int)screenSize.y - 75 - spacing * (i - column * max);
 		y -= 8 * column;
 		return new Vector2(x, y);
 	}
@@ -170,10 +157,16 @@ public class NodeManager {
 	}
 	
 	Vector2 outputPos(int i) {
-		int column = (int)Math.floor(i / 16);
-		int spacing = NODE_LENGTH / (int)Extensions.clamp(outputNodeCount, 1, 16);
-		int x = 900 + column * 30;		
-		int y = DEEPEST_NODE_X - spacing * (i - column * 16);
+		
+		Vector2 screenSize = Main.draw.getWindowSize();
+		
+		int max = (int)(screenSize.y / 31.25f);
+		
+		int column = (int)Math.floor(i / max);
+		int spacing = ((int)screenSize.y - 125) / (int)Extensions.clamp(outputNodeCount, 1, max);
+		
+		int x = (int)screenSize.x - 100 + column * 30;		
+		int y = (int)screenSize.y - 75 - spacing * (i - column * max);
 		y -= 8 * column;
 		return new Vector2(x, y);
 	}
