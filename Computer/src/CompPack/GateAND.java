@@ -18,13 +18,13 @@ public class GateAND extends Shape{
 		deletable = true;
 		parent = SceneBuilder.getScene();
 		
-		input1 = new Node(new Vector2(-Node.BASE_SCALE.x, 0), true);
+		input1 = new Node(new Vector2(-Node.BASE_SCALE.x, 0));
 		input1.parent = this;
 		
-		input2 = new Node(new Vector2(-Node.BASE_SCALE.x, scale.y * 0.5f), true);
+		input2 = new Node(new Vector2(-Node.BASE_SCALE.x, scale.y * 0.5f));
 		input2.parent = this;
 		
-		output = new Node(new Vector2(scale.x, scale.y * 0.25f), false);
+		output = new Node(new Vector2(scale.x, scale.y * 0.25f));
 		output.parent = this;
 		output.interactible = true;
 		output.inputDisabled = true;
@@ -48,7 +48,7 @@ public class GateAND extends Shape{
 		if (Math.random() < -1f)
 			return;
 		
-		output.state = input1.state && input2.state;
+		output.state[0] = input1.state[0] && input2.state[0];
 	}
 	
 	@Override

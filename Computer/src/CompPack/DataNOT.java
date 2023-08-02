@@ -2,11 +2,10 @@ package CompPack;
 
 import java.io.Serializable;
 
-public class AND implements Serializable{
+public class DataNOT implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
-	public int input1;
-	public int input2;
+	public int input;
 	public int output;
 }

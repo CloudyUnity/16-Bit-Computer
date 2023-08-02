@@ -4,9 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SaveData implements Serializable{
+public class DataOUTBUS implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
-	List<Block> blocks = new ArrayList<Block>();
+	public List<Integer> outputs = new ArrayList<Integer>();
+	public int input;
 }

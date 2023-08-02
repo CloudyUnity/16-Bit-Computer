@@ -23,7 +23,8 @@ public class GateBlock extends Shape{
 		double spacing = scale.y / block.inputs.size();
 		
 		for (int i = 0; i < block.inputs.size(); i++) {
-			Node n = new Node(new Vector2(-Node.BASE_SCALE.x, (int)(scale.y - BLOCK_SIZE - i * spacing)), true);
+			Vector2 nPos = new Vector2(-Node.BASE_SCALE.x, (int)(scale.y - BLOCK_SIZE - i * spacing));
+			Node n = new Node(nPos, block.states.get(i));
 			n.parent = this;
 			n.text = Character.toString('a' + i);			
 			inputs.add(n);
@@ -32,7 +33,8 @@ public class GateBlock extends Shape{
 		spacing = scale.y / block.outputs.size();
 		
 		for (int i = 0; i < block.outputs.size(); i++) {
-			Node n = new Node(new Vector2(scale.x, (int)(scale.y - BLOCK_SIZE - i * spacing)), false);
+			Vector2 nPos = new Vector2(scale.x, (int)(scale.y - BLOCK_SIZE - i * spacing));
+			Node n = new Node(nPos, block.states.get(i));
 			n.parent = this;
 			n.interactible = true;
 			n.inputDisabled = true;
