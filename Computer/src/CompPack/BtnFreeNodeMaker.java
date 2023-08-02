@@ -13,7 +13,7 @@ public class BtnFreeNodeMaker extends Shape{
 	@Override
 	protected void onMousePressed(MouseEvent e) {
 		
-		Node n = new Node(Main.mouse.mousePos,false);
+		Node n = new Node(Main.mouse.mousePos, 16);
 		n.layer = 10;
 		n.interactible = true;
 		n.draggable = true;

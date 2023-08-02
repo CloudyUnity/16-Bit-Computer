@@ -60,16 +60,23 @@ public class MyMouseListener implements MouseListener {
 			return;
 		}
 		
-		Shape hovered = Main.draw.closestInteract();
+		if (hovered == null)
+			return;
+			
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			
+			if (hovered instanceof NodeDragger) {
+				if (!((NodeDragger)hovered).conNode.interactible)
+					return;
+			}
+			
+			selected = hovered;
+			hovered.onMousePressed(e);	
+			return;
+		}
 		
-		if (hovered != null) {
-			if (e.getButton() == MouseEvent.BUTTON1) {
-				selected = hovered;
-				hovered.onMousePressed(e);				
-			}				
-			else if (e.getButton() == MouseEvent.BUTTON3)
-				hovered.onMouse3Pressed();
-		}			
+		if (e.getButton() == MouseEvent.BUTTON3)
+			hovered.onMouse3Pressed();	
 	}
 
 	@Override

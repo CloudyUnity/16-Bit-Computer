@@ -97,8 +97,11 @@ public class Drawing extends JPanel {
 				}
 				
 				usedMids.add((int)mid.x);
+				
+				float states = (float)Extensions.clamp(n.state.length, 1, 16);
+				int size = (int)Extensions.lerp(4, 10, states/16);
 
-				g2d.setStroke(new BasicStroke(5));
+				g2d.setStroke(new BasicStroke(size));
 				g2d.drawLine((int) start.x, (int) start.y, (int) mid.x, (int) start.y);
 				g2d.drawLine((int) mid.x, (int) start.y, (int) mid.x, (int) end.y);
 				g2d.drawLine((int) mid.x, (int) end.y, (int) end.x, (int) end.y);
@@ -133,8 +136,15 @@ public class Drawing extends JPanel {
 				drawCircle(g, pos, s.scale, s.filled);
 			else
 				drawSquare(g, pos, s.scale, s.filled);
+			
+			String txt = s.text;
+			if (s instanceof Node) {
+				Node n = (Node)s;
+				if (n.state.length > 1)
+					txt += "[" + n.state.length + "]";
+			}
 
-			drawText(g, s.text, pos, s.scale);
+			drawText(g, txt, pos, s.scale);
 		}
 	}
 

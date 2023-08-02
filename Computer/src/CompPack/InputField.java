@@ -29,8 +29,8 @@ class InputField extends JFrame {
 		saveBlockName.setBorder(new LineBorder(Color.black, 2));
 		loadBlockName.setBorder(new LineBorder(Color.black, 2));
 		
-		setPlaceholderText(saveBlockName, "Block name");
-		setPlaceholderText(loadBlockName, "Search");
+		setPlaceholderText(saveBlockName, " Block name");
+		setPlaceholderText(loadBlockName, " Search");
 		
 		saveBlockName.setBounds(320, 10, 200, 30);
 		loadBlockName.setBounds(320, 460, 200, 30);

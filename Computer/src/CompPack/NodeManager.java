@@ -10,6 +10,8 @@ public class NodeManager {
 	public List<Node> nodeListOutput = new ArrayList<Node>();
 	public List<GateAND> andList = new ArrayList<GateAND>();
 	public List<GateNOT> notList = new ArrayList<GateNOT>();
+	public List<GateInBus> inList = new ArrayList<GateInBus>();
+	public List<GateOutBus> outList = new ArrayList<GateOutBus>();
 
 	public int inputNodeCount;
 	public int outputNodeCount;
@@ -130,7 +132,7 @@ public class NodeManager {
 	
 	void makeInput(int i) {
 			
-		Node n = new Node(inputPos(i), false);
+		Node n = new Node(inputPos(i));
 		n.interactible = true;
 		n.inputDisabled = true;
 		n.isInput = true;
@@ -139,12 +141,15 @@ public class NodeManager {
 		n.layer = SceneBuilder.HUD_NODE;
 		nodeListInput.add(n);
 		
+		if (i > 15 && n.state.length == 1)
+			n.state[0] = true;
+		
 		Main.draw.reSortList();
 	}
 	
 	Vector2 inputPos(int i) {
 		int column = (int)Math.floor(i / 16);
-		int spacing = NODE_LENGTH / (int)Extensions.Clamp(inputNodeCount, 1, 16);
+		int spacing = NODE_LENGTH / (int)Extensions.clamp(inputNodeCount, 1, 16);
 		int x = 80 - column * 30;		
 		int y = DEEPEST_NODE_X - spacing * (i - column * 16);
 		y -= 8 * column;
@@ -153,8 +158,9 @@ public class NodeManager {
 	
 	void makeOutput(int i) {
 		
-		Node n = new Node(outputPos(i), true);
+		Node n = new Node(outputPos(i));
 		n.isOutput = true;
+		n.interactible = true;
 		n.scale = IN_OUT_BASE_SCALE;
 		n.text = "" + i;
 		n.layer = SceneBuilder.HUD_NODE;
@@ -165,7 +171,7 @@ public class NodeManager {
 	
 	Vector2 outputPos(int i) {
 		int column = (int)Math.floor(i / 16);
-		int spacing = NODE_LENGTH / (int)Extensions.Clamp(outputNodeCount, 1, 16);
+		int spacing = NODE_LENGTH / (int)Extensions.clamp(outputNodeCount, 1, 16);
 		int x = 900 + column * 30;		
 		int y = DEEPEST_NODE_X - spacing * (i - column * 16);
 		y -= 8 * column;

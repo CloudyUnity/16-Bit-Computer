@@ -18,8 +18,23 @@ public class NodeDragger extends Shape{
 	
 	@Override 
 	protected void onMousePressed(MouseEvent e) {
+				
 		if (conNode.draggable && e.getClickCount() == 2) {
 			Main.mouse.setSelected(conNode);
+		}
+	}
+	
+	@Override
+	protected void onMouse3Pressed() {
+		
+		if (conNode.isInput || conNode.isOutput) {
+			try {
+				int size = Integer.parseInt(InputField.loadBlockName.getText());
+				conNode.setStateSize(size);
+			}
+			catch (Exception e) {
+				System.out.println("ERROR: Invalid integer");
+			}
 		}
 	}
 	
@@ -33,6 +48,7 @@ public class NodeDragger extends Shape{
 		}			
 		
 		Node node = Main.node.FindClosestNodeTo(position, conNode);
+		
 		position = conNode.position;
 		if (node == null) {
 			for (Node o : conNode.outputs)
@@ -40,6 +56,9 @@ public class NodeDragger extends Shape{
 			conNode.outputs.clear();			
 			return;
 		}
+		
+		if (node.state.length != conNode.state.length)
+			return;
 		
 		if (node.inputNode != null) {
 			node.inputNode.outputs.remove(node);

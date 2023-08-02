@@ -10,7 +10,7 @@ public class Node extends Shape{
 	public Node inputNode;
 	
 	NodeDragger drag;
-	public Boolean state = false;
+	public Boolean[] state;
 	public Boolean inputDisabled = false;		
 	public Boolean deactivated = false;
 	public Boolean isInput = false;
@@ -18,12 +18,24 @@ public class Node extends Shape{
 	
 	public static final Vector2 BASE_SCALE = new Vector2(15, 15);
 	
-	public Node(Vector2 pos, Boolean outputDisabled) {
-		super(pos, BASE_SCALE, SceneBuilder.NODE, Color.black);		
+	public Node(Vector2 pos) {
+		super(pos, BASE_SCALE, SceneBuilder.NODE, Color.black);	
 		
-		if (!outputDisabled) {
-			drag = new NodeDragger(this);
-		}		
+		setStateSize(1);
+		
+		drag = new NodeDragger(this);
+		
+		isCircle = true;
+		
+		Main.node.nodeList.add(this);
+	}
+	
+	public Node(Vector2 pos, int busSize) {
+		super(pos, BASE_SCALE, SceneBuilder.NODE, Color.black);	
+		
+		setStateSize(busSize);
+		
+		drag = new NodeDragger(this);	
 		
 		isCircle = true;
 		
@@ -37,20 +49,36 @@ public class Node extends Shape{
 		}	
 		
 		Boolean noInput = inputNode == null || inputNode.deactivated;
-		if (noInput && !isInput && !inputDisabled && visible)
-			state = false;
+		if (noInput && !isInput && !inputDisabled && visible) {
+			for (int i = 0; i < state.length; i++)
+				state[i] = false;
+		}
 		
 		for (int i = outputs.size() - 1; i >= 0; i--) {
 			if (outputs.get(i) == null || outputs.get(i).deactivated)
 				outputs.remove(i);
-			else
-				outputs.get(i).state = state;
+			else {
+				for (int j = 0; j < state.length; j++)
+					outputs.get(i).state[j] = state[j];
+			}
 		}
 		
-		if (state)
+		if (state.length == 1 && state[0])
 			setColor(ColorManager.RED);
 		else
 			setColor(ColorManager.BLACK);
+	}
+	
+	public void setStateSize(int size) {
+		outputs.clear();
+		if (inputNode != null) {
+			inputNode.outputs.remove(this);
+			inputNode = null;
+		}
+		state = new Boolean[size];
+		for (int i = 0; i < size; i++) {
+			state[i] = false;
+		}
 	}
 	
 	public List<Vector2> endWirePoint() {
@@ -76,6 +104,13 @@ public class Node extends Shape{
 	
 	protected void onClick() {
 
-		state = !state;
+		if (state.length == 1) {
+			state[0] = !state[0];
+			return;
+		}
+		
+		for (int i = 0; i < state.length; i++) {
+			state[i] = Math.random() < 0.5 ? true : false;
+		}
 	}
 }

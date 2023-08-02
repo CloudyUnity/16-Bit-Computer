@@ -76,7 +76,7 @@ public class SaveManager {
 		
 		for (Block block : data.blocks) {
 			if (block.name.equals(name)) {
-				//showBlock(block);
+				showBlock(block);
 				return block;
 			}				
 		}
@@ -106,16 +106,20 @@ public class SaveManager {
 		System.out.println("Name - " + block.name);
 		System.out.println("Nodes - " + block.nodes);
 		
+		for (Integer i : block.states) {
+			System.out.println("Node - " + i + " , States: " + block.states.get(i));
+		}
+		
 		for (Integer i : block.inputs) {
 			System.out.println("Input - " + i);
 		}
 		for (Integer i : block.outputs) {
 			System.out.println("Output - " + i);
 		}		
-		for (AND i : block.andList) {
+		for (DataAND i : block.andList) {
 			System.out.println("AND - " + i.input1 + ", " + i.input2 + ", " + i.output);
 		}
-		for (NOT i : block.notList) {
+		for (DataNOT i : block.notList) {
 			System.out.println("NOT - " + i.input + ", " + i.output);
 		}
 		for (Vector2 i : block.connections) {

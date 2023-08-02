@@ -17,10 +17,10 @@ public class GateNOT extends Shape{
 		deletable = true;
 		parent = SceneBuilder.getScene();
 		
-		input = new Node(new Vector2(-Node.BASE_SCALE.x, scale.y * 0.25f), true);
+		input = new Node(new Vector2(-Node.BASE_SCALE.x, scale.y * 0.25f));
 		input.parent = this;
 		
-		output = new Node(new Vector2(50, scale.y * 0.25f), false);
+		output = new Node(new Vector2(50, scale.y * 0.25f));
 		output.parent = this;
 		output.interactible = true;
 		output.inputDisabled = true;
@@ -39,7 +39,7 @@ public class GateNOT extends Shape{
 	@Override
 	protected void update() {
 		
-		output.state = !input.state;
+		output.state[0] = !input.state[0];
 	}
 	
 	@Override
