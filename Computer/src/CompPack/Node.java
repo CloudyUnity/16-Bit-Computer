@@ -15,6 +15,7 @@ public class Node extends Shape{
 	public Boolean deactivated = false;
 	public Boolean isInput = false;
 	public Boolean isOutput = false;
+	public Boolean hideWires = false;
 	
 	public static final Vector2 BASE_SCALE = new Vector2(15, 15);
 	

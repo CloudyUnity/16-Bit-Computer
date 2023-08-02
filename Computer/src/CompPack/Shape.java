@@ -10,6 +10,11 @@ public class Shape {
 	public Color color;
 	public Vector2 position;
 	public Vector2 scale;
+	
+	public Boolean relativeToWidth = false;
+	public Boolean relativeToHeight = false;
+	public Boolean relativeToWidthScale = false;
+	public Boolean relativeToHeightScale = false;
 
 	public Boolean visible = true;
 	public Boolean isCircle = false;
@@ -45,21 +50,21 @@ public class Shape {
 	}
 
 	public Vector2 max() {
-		return position.add(scale);
+		return relativePos().add(scale);
 	}
 
 	public Vector2 min() {
-		return position;
+		return relativePos();
 	}
 
 	public Vector2 center() {
-		return position.add(scale.mult(0.5f));
+		return relativePos().add(scale.mult(0.5f));
 	}
 
 	public Vector2 worldPosition() {
 
 		Shape current = this;
-		Vector2 pos = new Vector2(position);
+		Vector2 pos = relativePos();
 
 		while (current.parent != null) {
 			pos = pos.add(current.parent.position);
@@ -95,13 +100,15 @@ public class Shape {
 	}
 
 	public Boolean contains(Vector2 pos) {
-
+		
 		pos = toLocalPosition(new Vector2(pos));
+		
+		Vector2 myPos = relativePos();
 
 		if (isCircle) {
 
-			double powX = Math.pow(pos.x - position.x, 2);
-			double powY = Math.pow(pos.y - position.y, 2);
+			double powX = Math.pow(pos.x - myPos.x, 2);
+			double powY = Math.pow(pos.y - myPos.y, 2);
 			return powX + powY <= scale.x * scale.y * 0.25f;
 		}
 
@@ -109,6 +116,19 @@ public class Shape {
 		Boolean withinY = pos.y <= max().y && pos.y >= min().y;
 
 		return withinX && withinY;
+	}
+	
+	public Vector2 relativePos() {
+		Vector2 screenSize = Main.draw.getWindowSize();
+		Vector2 pos = new Vector2(position);
+		
+		if (relativeToWidth)
+			pos.x = screenSize.x - pos.x;
+		
+		if (relativeToHeight)
+			pos.y = screenSize.y - pos.y;
+		
+		return pos;
 	}
 
 	public void moveCenterTo(Vector2 pos) {

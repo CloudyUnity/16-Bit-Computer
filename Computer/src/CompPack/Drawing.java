@@ -76,7 +76,7 @@ public class Drawing extends JPanel {
 
 		for (Node n : new ArrayList<Node>(Main.node.nodeList)) {
 
-			if (!n.interactible || !n.visible)
+			if (!n.interactible || !n.visible || n.hideWires)
 				continue;
 
 			Vector2 start = n.worldCenter();
@@ -112,6 +112,8 @@ public class Drawing extends JPanel {
 
 	public void drawShapes(Graphics g) {
 
+		Vector2 screenSize = getWindowSize();
+		
 		Boolean drawnWires = false;
 		for (Shape s : new ArrayList<Shape>(shapeList)) {
 
@@ -131,25 +133,36 @@ public class Drawing extends JPanel {
 			}			
 
 			Vector2 pos = s.worldPosition();
+			Vector2 scale = new Vector2(s.scale);			
+			
+			if (s.relativeToWidthScale) {
+				scale.x = screenSize.x - scale.x;
+			}
+			
+			if (s.relativeToHeightScale) {
+				scale.y = screenSize.y - scale.y;
+			}
 
 			if (s.isCircle)
-				drawCircle(g, pos, s.scale, s.filled);
+				drawCircle(g, pos, scale, s.filled);
 			else
-				drawSquare(g, pos, s.scale, s.filled);
+				drawSquare(g, pos, scale, s.filled);
 			
 			String txt = s.text;
 			if (s instanceof Node) {
 				Node n = (Node)s;
 				if (n.state.length > 1)
-					txt += "[" + n.state.length + "]";
+					txt += "." + n.state.length;
+				if (n.hideWires)
+					txt += ".X";
 			}
 
-			drawText(g, txt, pos, s.scale);
+			drawText(g, txt, pos, scale);
 		}
 	}
 
 	public void drawHovered(Graphics g, Shape s) {
-
+		
 		Vector2 pos = s.worldPosition();
 		
 		Vector2 scale = s.scale.mult(1.1f);
@@ -216,6 +229,11 @@ public class Drawing extends JPanel {
 		}
 
 		return null;
+	}
+	
+	public Vector2 getWindowSize() {
+		Dimension d = frame.getContentPane().getSize();
+		return new Vector2(d.width, d.height);
 	}
 
 	public void closeFrame() {

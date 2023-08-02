@@ -39,6 +39,15 @@ class InputField extends JFrame {
 		Main.draw.add(loadBlockName);
 	}
 	
+	public static void update() {
+		if (loadBlockName == null)
+			return;
+		
+		Vector2 screenSize = Main.draw.getWindowSize();
+		
+		loadBlockName.setBounds(320, (int)screenSize.y - 40, 200, 30);
+	}
+	
 	public static void setPlaceholderText(JTextField textField, String text) {
 		
         String placeholderText = text;
