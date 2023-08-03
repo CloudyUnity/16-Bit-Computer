@@ -42,7 +42,7 @@ public class NodeDragger extends Shape{
 	protected void onMouseRelease(double dur) {
 		
 		if (dur < 200) {
-			conNode.onClick();
+			conNode.onMouseRelease(dur);
 			position = conNode.position;
 			return;
 		}			

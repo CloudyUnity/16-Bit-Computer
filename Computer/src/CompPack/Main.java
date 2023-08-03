@@ -7,6 +7,7 @@ public class Main {
 	public static MyMouseListener mouse;
 	public static UpdateManager up;
 	public static BlockBuilder blockBuilder;
+	public static KeyboardInputs keyboard;
 	
 	public static void main(String[] args) {		
 		
@@ -20,8 +21,10 @@ public class Main {
 		mouse = new MyMouseListener();
 		up = new UpdateManager();
 		blockBuilder = new BlockBuilder();
+		keyboard = new KeyboardInputs();
 				
 		draw.addMouseListener(mouse);
+		draw.addKeyListener(keyboard);
 		draw.initialise();	
 		
 		node.initialise(3, 1);

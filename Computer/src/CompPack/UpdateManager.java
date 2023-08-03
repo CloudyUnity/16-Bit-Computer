@@ -19,9 +19,11 @@ public class UpdateManager {
 			
 			Main.mouse.update();
 			
+			Main.keyboard.update();
+			
 			Main.node.update();
 			
-			InputField.update();
+			InputField.update();				
 			
 			for (Shape s : Main.draw.shapeList) {
 				s.update();

@@ -53,6 +53,8 @@ public class MyMouseListener implements MouseListener {
 	public void mousePressed(MouseEvent e) {
 				
 		lastPressTime = System.currentTimeMillis();
+		
+		Main.draw.requestFocusInWindow();
 				
 		if (e.getButton() == MouseEvent.BUTTON2) {
 			draggingScene = true;

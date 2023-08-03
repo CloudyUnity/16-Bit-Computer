@@ -31,8 +31,7 @@ public class BtnBlockMaker extends Shape{
 		if (block == null)
 			return;
 		
-		GateBlock gate = new GateBlock(block, Main.mouse.mousePos, Color.lightGray);
-		gate.setColor(ColorManager.GREEN);
+		GateBlock gate = new GateBlock(block, Main.mouse.mousePos, ColorManager.GREEN);
 		Main.mouse.setSelected(gate);
 	}
 	

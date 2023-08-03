@@ -40,6 +40,8 @@ public class Drawing extends JPanel {
 
 		setDoubleBuffered(true);
 		setLayout(null);
+		setFocusable(true);
+        requestFocusInWindow();
 
 		shapeList = new ArrayList<Shape>();
 	}
@@ -114,18 +116,42 @@ public class Drawing extends JPanel {
 
 		Vector2 screenSize = getWindowSize();
 		
+		Node nodeHover = null;		
+		if (Main.mouse.hovered instanceof NodeDragger && Main.mouse.hovered != Main.mouse.selected) {
+			nodeHover = ((NodeDragger)Main.mouse.hovered).conNode;
+		}
+		
 		Boolean drawnWires = false;
 		for (Shape s : new ArrayList<Shape>(shapeList)) {
 
 			if ((s.layer >= SceneBuilder.WIRE && !drawnWires)) {
 				drawWires(g);
 				drawnWires = true;
-			}
-
-			if (!s.visible)
-				continue;
+			}	
 			
-			g.setColor(s.color);
+			if (!s.visible || s == null)
+				continue;
+
+			g.setColor(s.color);		
+			
+			if (s == nodeHover) {
+				drawHovered(g, nodeHover);
+				
+				int size = nodeHover.state.length; 
+				if (size != 1) {
+					
+					String text = "";
+					for (int i = size - 1; i >= 0; i--)
+						text += nodeHover.state[i] ? "1" : "0";
+					drawExactText(g, text, Main.mouse.mousePos.add(new Vector2(15, 12)), 16, ColorManager.BLACK);
+					drawExactText(g, text, Main.mouse.mousePos.add(new Vector2(15, 8)), 16, ColorManager.BLACK);
+					drawExactText(g, text, Main.mouse.mousePos.add(new Vector2(17, 10)), 16, ColorManager.BLACK);
+					drawExactText(g, text, Main.mouse.mousePos.add(new Vector2(13, 10)), 16, ColorManager.BLACK);
+					drawExactText(g, text, Main.mouse.mousePos.add(new Vector2(15, 10)), 16, ColorManager.WHITE);
+				}
+
+				continue;			
+			}														
 
 			if (Main.mouse.hovered == s) {
 				drawHovered(g, s);
@@ -174,8 +200,17 @@ public class Drawing extends JPanel {
 			drawCircle(g, pos, scale, s.filled);
 		else
 			drawSquare(g, pos, scale, s.filled);
+		
+		String txt = s.text;
+		if (s instanceof Node) {
+			Node n = (Node)s;
+			if (n.state.length > 1)
+				txt += "." + n.state.length;
+			if (n.hideWires)
+				txt += ".X";
+		}
 
-		drawText(g, s.text, pos, scale);
+		drawText(g, txt, pos, scale);
 	}
 
 	public void drawSquare(Graphics g, Vector2 pos, Vector2 scale, Boolean filled) {
@@ -218,11 +253,22 @@ public class Drawing extends JPanel {
 
 		g.drawString(txt, (int) pos.x, (int) pos.y);
 	}
+	
+	public void drawExactText(Graphics g, String txt, Vector2 pos, int scale, String color) {
+
+		if (txt.isBlank())
+			return;
+
+		g.setFont(new Font("TimesRoman", Font.BOLD, scale));
+		g.setColor(ColorManager.parseColor(color));
+
+		g.drawString(txt, (int) pos.x, (int) pos.y);
+	}
 
 	public Shape closestInteract() {
 
-		for (Shape s : shapeList) {
-
+		for (int i = shapeList.size() - 1; i >= 0; i--) {
+			Shape s = shapeList.get(i);
 			if (s.interactible && s.contains(Main.mouse.mousePos)) {
 				return s;
 			}
