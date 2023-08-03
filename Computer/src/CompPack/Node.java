@@ -56,11 +56,16 @@ public class Node extends Shape{
 		}
 		
 		for (int i = outputs.size() - 1; i >= 0; i--) {
-			if (outputs.get(i) == null || outputs.get(i).deactivated)
+			
+			Boolean isNull = outputs.get(i) == null;
+			Boolean deactive = outputs.get(i).deactivated;
+			Boolean unEqualLengths = outputs.get(i).state.length != state.length;
+			
+			if (isNull || deactive || unEqualLengths)
 				outputs.remove(i);
 			else {
 				for (int j = 0; j < state.length; j++)
-					outputs.get(i).state[j] = state[j];
+					outputs.get(i).state[j] = state[j];				
 			}
 		}
 		
@@ -103,8 +108,9 @@ public class Node extends Shape{
 		return results;
 	}
 	
-	protected void onClick() {
-
+	@Override
+	protected void onMouseRelease(double dur) {
+		
 		if (state.length == 1) {
 			state[0] = !state[0];
 			return;
