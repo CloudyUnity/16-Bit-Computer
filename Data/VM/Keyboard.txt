@@ -1,0 +1,107 @@
+
+function Keyboard.init 0
+push argument 0
+pop pointer 0
+push constant 24576
+pop static 0
+push constant 0
+return
+
+function Keyboard.keyPressed 0
+push argument 0
+pop pointer 0
+push static 0
+push constant 0
+add
+pop pointer 1
+push that 0
+return
+
+function Keyboard.readChar 1
+push argument 0
+pop pointer 0
+label WHILE_START_44
+push constant 404
+call Keyboard.keyPressed 1
+push constant 0
+eq
+not
+if-goto WHILE_END_44
+goto WHILE_START_44
+label WHILE_END_44
+push constant 404
+call Keyboard.keyPressed 1
+pop local 0
+label WHILE_START_65
+push constant 404
+call Keyboard.keyPressed 1
+push constant 0
+eq
+not
+not
+if-goto WHILE_END_65
+goto WHILE_START_65
+label WHILE_END_65
+push constant 404
+push local 0
+call Output.printChar 2
+pop temp 0
+push local 0
+return
+
+function Keyboard.readLine 2
+push argument 0
+pop pointer 0
+push constant 404
+push argument 1
+call Output.printString 2
+pop temp 0
+push constant 404
+push constant 50
+call String.new 2
+pop local 0
+push constant 404
+call Keyboard.readChar 1
+pop local 1
+label WHILE_START_135
+push local 1
+push constant 404
+call String.newLine 1
+eq
+not
+not
+if-goto WHILE_END_135
+push local 1
+push constant 404
+call String.backSpace 1
+eq
+not
+if-goto IF_L151
+push local 0
+call eraseLastChar 1
+pop temp 0
+goto IF_END_149
+label IF_L151
+push local 0
+push local 1
+call appendChar 2
+pop temp 0
+label IF_END_149
+push constant 404
+call Keyboard.readChar 1
+pop local 1
+goto WHILE_START_135
+label WHILE_END_135
+push local 0
+return
+
+function Keyboard.readInt 1
+push argument 0
+pop pointer 0
+push constant 404
+push argument 1
+call Keyboard.readLine 2
+pop local 0
+push local 0
+call intValue 1
+return

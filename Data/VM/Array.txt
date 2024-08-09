@@ -1,0 +1,18 @@
+
+function Array.new 0
+push argument 0
+pop pointer 0
+push constant 404
+push argument 1
+call Memory.alloc 2
+return
+
+function Array.dispose 0
+push argument 0
+pop pointer 0
+push constant 404
+push pointer 0
+call Memory.deAlloc 2
+pop temp 0
+push constant 0
+return

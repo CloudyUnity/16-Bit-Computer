@@ -1,0 +1,470 @@
+
+function Memory.init 0
+push argument 0
+pop pointer 0
+push constant 0
+pop static 0
+push constant 2048
+pop static 1
+push constant 16384
+pop static 2
+push constant 0
+pop static 3
+push constant 1
+pop static 4
+push constant 1
+neg
+pop static 5
+push static 1
+push static 3
+add
+push constant 16384
+push constant 2048
+sub
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push static 1
+push static 4
+add
+push constant 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 0
+return
+
+function Memory.peek 0
+push argument 0
+pop pointer 0
+push static 0
+push argument 1
+add
+pop pointer 1
+push that 0
+return
+
+function Memory.poke 0
+push argument 0
+pop pointer 0
+push static 0
+push argument 1
+add
+push argument 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 0
+return
+
+function Memory.alloc 2
+push argument 0
+pop pointer 0
+push constant 404
+push argument 1
+call Memory.best_fit 2
+pop local 0
+push local 0
+push static 2
+eq
+not
+if-goto IF_L150
+push constant 0
+pop local 1
+goto IF_END_148
+label IF_L150
+push local 0
+push constant 0
+eq
+not
+if-goto IF_L165
+push static 1
+pop local 1
+push constant 404
+push local 1
+push argument 1
+call Memory.do_alloc 3
+pop static 1
+goto IF_END_163
+label IF_L165
+push local 0
+push static 4
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 0
+push static 4
+add
+push constant 404
+push local 1
+push argument 1
+call Memory.do_alloc 3
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+label IF_END_163
+label IF_END_148
+push local 1
+push constant 1
+add
+return
+
+function Memory.best_fit 5
+push argument 0
+pop pointer 0
+push static 2
+pop local 0
+push constant 16384
+push constant 2048
+sub
+pop local 3
+push static 1
+pop local 2
+push constant 0
+pop local 1
+label WHILE_START_271
+push local 2
+push constant 0
+eq
+not
+not
+if-goto WHILE_END_271
+push local 2
+push static 3
+add
+pop pointer 1
+push that 0
+push constant 1
+sub
+pop local 4
+push local 4
+push argument 1
+lt
+not
+push local 4
+push local 3
+lt
+not
+if-goto IF_L293
+push local 1
+pop local 0
+push local 4
+pop local 3
+goto IF_END_291
+label IF_L293
+label IF_END_291
+push local 2
+pop local 1
+push local 2
+push static 4
+add
+pop pointer 1
+push that 0
+pop local 2
+goto WHILE_START_271
+label WHILE_END_271
+push local 0
+return
+
+function Memory.do_alloc 2
+push argument 0
+pop pointer 0
+push argument 1
+push static 3
+add
+pop pointer 1
+push that 0
+push argument 2
+push constant 1
+add
+push constant 2
+add
+gt
+not
+if-goto IF_L357
+push argument 1
+push argument 2
+add
+push constant 1
+add
+pop local 0
+push local 0
+push static 4
+add
+push argument 1
+push static 4
+add
+pop pointer 1
+push that 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push static 3
+add
+push argument 1
+push static 3
+add
+pop pointer 1
+push that 0
+push local 0
+push argument 1
+sub
+sub
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push argument 1
+push constant 1
+add
+pop argument 1
+push argument 1
+push static 5
+add
+push argument 2
+push constant 1
+add
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+goto IF_END_355
+label IF_L357
+push argument 1
+push static 4
+add
+pop pointer 1
+push that 0
+pop local 0
+push argument 1
+push static 3
+add
+pop pointer 1
+push that 0
+pop local 1
+push argument 1
+push constant 1
+add
+pop argument 1
+push argument 1
+push static 5
+add
+push local 1
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+label IF_END_355
+push local 0
+return
+
+function Memory.deAlloc 3
+push argument 0
+pop pointer 0
+push argument 1
+push static 5
+add
+pop pointer 1
+push that 0
+pop local 0
+push argument 1
+push constant 1
+sub
+pop argument 1
+push constant 404
+push argument 1
+call Memory.find_prev_free 2
+pop local 1
+push local 1
+push constant 0
+eq
+not
+if-goto IF_L511
+push argument 1
+push static 3
+add
+push local 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push argument 1
+push static 4
+add
+push static 1
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push argument 1
+pop static 1
+push argument 1
+pop local 1
+goto IF_END_509
+label IF_L511
+push local 1
+push local 1
+push static 3
+add
+pop pointer 1
+push that 0
+add
+push argument 1
+eq
+not
+if-goto IF_L547
+push local 1
+push static 3
+add
+push local 1
+push static 3
+add
+pop pointer 1
+push that 0
+push local 0
+add
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+goto IF_END_545
+label IF_L547
+push argument 1
+push static 3
+add
+push local 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push argument 1
+push static 4
+add
+push local 1
+push static 4
+add
+pop pointer 1
+push that 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 1
+push static 4
+add
+push argument 1
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push argument 1
+pop local 1
+label IF_END_545
+label IF_END_509
+push local 1
+push local 1
+push static 3
+add
+pop pointer 1
+push that 0
+add
+push local 1
+push static 4
+add
+pop pointer 1
+push that 0
+eq
+not
+if-goto IF_L611
+push local 1
+push static 4
+add
+pop pointer 1
+push that 0
+pop local 2
+push local 1
+push static 3
+add
+push local 1
+push static 3
+add
+pop pointer 1
+push that 0
+push local 2
+push static 3
+add
+pop pointer 1
+push that 0
+add
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 1
+push static 4
+add
+push local 2
+push static 4
+add
+pop pointer 1
+push that 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+goto IF_END_609
+label IF_L611
+label IF_END_609
+push constant 0
+return
+
+function Memory.find_prev_free 1
+push argument 0
+pop pointer 0
+push static 1
+push argument 1
+gt
+not
+if-goto IF_L679
+push constant 0
+return
+goto IF_END_677
+label IF_L679
+label IF_END_677
+push static 1
+pop local 0
+label WHILE_START_693
+push local 0
+push static 4
+add
+pop pointer 1
+push that 0
+push constant 0
+eq
+not
+push local 0
+push static 4
+add
+pop pointer 1
+push that 0
+push argument 1
+lt
+not
+if-goto WHILE_END_693
+push local 0
+push static 4
+add
+pop pointer 1
+push that 0
+pop local 0
+goto WHILE_START_693
+label WHILE_END_693
+push local 0
+return
