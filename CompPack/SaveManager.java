@@ -18,7 +18,7 @@ import java.util.List;
 
 public class SaveManager {
 
-	public static final String FILE_PATH = "C:\\Users\\finnw\\AppData\\LocalLow\\Java Programs\\Computer\\";
+	public static final String FILE_PATH = "Data/Logic Builder/";
 
 	public static final Boolean USING_MEM_MAP = true;
 	public static final Boolean SAVE_AS_BLOCKS = true;
