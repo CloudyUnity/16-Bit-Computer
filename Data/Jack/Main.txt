@@ -1,0 +1,17 @@
+class Main{
+	
+	method void main() {
+		
+		var int x;
+		var int y;
+		let x = 5;
+		let y = 10;
+		let x = x+1;
+		let y = y+x;
+		// x = 6
+		// y = 16
+		let x = x*y;
+		do Output.printInt(x);
+		return;
+	}
+}
