@@ -1,3 +1,5 @@
+Created in the summer before college 2023
+
 This is a 16-bit computer built from basic logic components.  
 This program is split into 5 parts. Only Logic Builder can be run yourself without some significant effort.  
 Classes that start with an underscore belong to the compiler-translator-assembler-computer parts.  
